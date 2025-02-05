@@ -63,6 +63,7 @@ def calcul(jeu):
     return 0
 
 def minimax(jeu,prof,maximize):
+    n = len(jeu)
     score_actuel = calcul(jeu)
 
     if score_actuel == 1 or score_actuel == -1:
@@ -73,16 +74,16 @@ def minimax(jeu,prof,maximize):
     
     if maximize:
         best = -math.inf
-        for i in range(len(jeu)):
-            for j in range(len(jeu)):
+        for i in range(n):
+            for j in range(n):
                 if jeu[i][j] == " ":
                     jeu[i][j] = "O"
                     best = max(best,minimax(jeu,prof+1,False))
                     jeu[i][j] == " "
     else:
         best = math.inf
-        for i in range(len(jeu)):
-            for j in range(len(jeu)):
+        for i in range(n):
+            for j in range(n):
                 if jeu[i][j] == " ":
                     jeu[i][j] = "X"
                     best = min(best,minimax(jeu,prof+1,False))
@@ -91,11 +92,12 @@ def minimax(jeu,prof,maximize):
     return best
 
 def meilleure_position(jeu,joueur):
+    n = len(jeu)
     best = -math.inf
     m_pos = (-1,-1)
 
-    for i in range(len(jeu)):
-        for j in range(len(jeu)):
+    for i in range(n):
+        for j in range(n):
             if jeu[i][j] == " ":
                 jeu[i][j] = joueur
                 pos = minimax(jeu,0,joueur == "X")
@@ -113,9 +115,11 @@ print("Tu joues avec 'X' et l'IA joue avec 'O'.")
 dessine_morpion(morpion)
 
 while True:
-    if cases_restante(jeu) and score_actuel(jeu) == 0:
+    if cases_restante(morpion) and calcul(morpion) == 0:
         print("\nTour du joueur :")
         pos = input().split()
+
+        # faut faire jouer le joueur et l'IA
 
 
     pass
