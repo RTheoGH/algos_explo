@@ -37,7 +37,7 @@ def calcul(jeu):
 
     return 0
 
-def minimax(jeu,prof,):
+def minimax(jeu,prof,maximize):
     score_actuel = calcul(jeu)
 
     if score_actuel == 1 or score_actuel == -1:
@@ -45,10 +45,27 @@ def minimax(jeu,prof,):
 
     if not cases_restante(jeu):
         return 0
+    
+    if maximize:
+        best = -math.inf
+        for i in range(len(jeu)):
+            for j in range(len(jeu)):
+                if jeu[i][j] == " ":
+                    jeu[i][j] = "O"
+                    best = max(best,minimax(jeu,prof+1,False))
+                    jeu[i][j] == " "
     else:
-        if
+        best = math.inf
+        for i in range(len(jeu)):
+            for j in range(len(jeu)):
+                if jeu[i][j] == " ":
+                    jeu[i][j] = "X"
+                    best = min(best,minimax(jeu,prof+1,False))
+                    jeu[i][j] == " "
 
-    return 0
+    return best
+
+
 
 n = 10
 morpion = [[" " for _ in range(n)] for _ in range(n)]
