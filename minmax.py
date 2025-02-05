@@ -65,7 +65,20 @@ def minimax(jeu,prof,maximize):
 
     return best
 
+def meilleure_position(jeu,joueur):
+    best = -math.inf
+    m_pos = (-1,-1)
 
+    for i in range(len(jeu)):
+        for j in range(len(jeu)):
+            if jeu[i][j] == " ":
+                jeu[i][j] = joueur
+                pos = minimax(jeu,0,joueur == "X")
+                jeu[i][j] == " "
+                if(pos > m_pos):
+                    best = pos
+                    m_pos = (i,j)
+    return m_pos
 
 n = 10
 morpion = [[" " for _ in range(n)] for _ in range(n)]
@@ -74,3 +87,10 @@ print("On joue au Morpion !")
 print("Tu joues avec 'X' et l'IA joue avec 'O'.")
 dessine_morpion(morpion)
 
+while True:
+    if cases_restante(jeu) and score_actuel(jeu) == 0:
+        print("\nTour du joueur :")
+        pos = input().split()
+        
+
+    pass
