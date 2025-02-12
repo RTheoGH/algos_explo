@@ -11,12 +11,18 @@ def dessine_puissance4(jeu):
 def cases_restantes(jeu):
     return any(jeu[0][col] == " " for col in range(len(jeu[0])))
 
-def placer_jeton(jeu, col, jeton):
+def placer_jeton(jeu,col,jeton):
     for ligne in reversed(jeu):
         if ligne[col] == " ":
             ligne[col] = jeton
             return True
     return False
+
+def retirer_jeton(jeu,col):
+    for ligne in jeu:
+        if ligne[col] != " ":
+            ligne[col] = " "
+            break
 
 def calcul(jeu):
     n, m = len(jeu), len(jeu[0])
@@ -109,17 +115,11 @@ def meilleure_position(jeu):
 
     return m_col
 
-def retirer_jeton(jeu, col):
-    for ligne in jeu:
-        if ligne[col] != " ":
-            ligne[col] = " "
-            break
-
 # --- Main ---
 print("\nOn joue au Puissance 4 !")
 print("Tu joues avec 'X' et l'IA joue avec 'O'.")
 
-n, m = 6, 7  # Dimensions du plateau de jeu
+n, m = 6, 7  # Dimensions
 puissance4 = [[" " for _ in range(m)] for _ in range(n)]
 dessine_puissance4(puissance4)
 
