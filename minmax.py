@@ -1,6 +1,7 @@
 import math
 import random
 import time
+from random import randint
 
 def dessine_morpion(jeu):
     n = len(jeu)
@@ -118,29 +119,56 @@ print("\n")
 morpion = [[" " for _ in range(n)] for _ in range(n)]
 dessine_morpion(morpion)
 
+m = int(input("\nChoix du mode\nSi Joueur contre IA -> 1\nSi IA contre IA -> 2\nChoix : "))
+while m != 1 and m != 2:
+    m = int(input("\nChoix du mode\nSi Joueur contre IA -> 1\nSi IA contre IA -> 2\nChoix : "))
+
+print("C'est parti !")
+premier_coup = True
+
 while True:
-    if cases_restante(morpion) and calcul(morpion) == 0:
-        print("\nTour du joueur :")
-        pos = input("Position i j : ").split()
-        print("\n")
-        try:
-            i, j = int(pos[0]),int(pos[1])
-            if morpion[i][j] == " ":
+    if m == 1:
+        if cases_restante(morpion) and calcul(morpion) == 0:
+            print("\nTour du joueur :")
+            pos = input("Position i j : ").split()
+            print("\n")
+            try:
+                i, j = int(pos[0]),int(pos[1])
+                if morpion[i][j] == " ":
+                    morpion[i][j] = "X"
+                    dessine_morpion(morpion)
+                else:
+                    print("Case occupée")
+                    continue
+            except:
+                print("Position invalide")
+                continue
+    else:
+        print("\nTour de l'IA 1\n")
+        if cases_restante(morpion) and calcul(morpion) == 0 and premier_coup:
+            i = randint(0,n)
+            j = randint(0,n)
+            morpion[i][j] = "X"
+            dessine_morpion(morpion)
+            premier_coup = False
+        else:
+            if cases_restante(morpion) and calcul(morpion) == 0 and not premier_coup:
+                start_temps_ia = time.time()
+                i,j = meilleure_position(morpion)
+                print("Temps pris avec minmax : ", time.time()-start_temps_ia, " secondes\n")
                 morpion[i][j] = "X"
                 dessine_morpion(morpion)
-            else:
-                print("Case occupée")
-                continue
-        except:
-            print("Position invalide")
-            continue
 
-    if calcul(morpion) == -1:
+    if calcul(morpion) == -1 and m == 1:
         print("Joueur a gagné")
         break
+    else:
+        if calcul(morpion) == -1 and m == 2:
+            print("L'IA 1 a gagné")
+            break
 
     if cases_restante(morpion) and calcul(morpion) == 0:
-        print("\nTour de l'IA\n")
+        print("\nTour de l'IA 2\n")
         start_temps_ia = time.time()
         i,j = meilleure_position(morpion)
         print("Temps pris avec minmax : ", time.time()-start_temps_ia, " secondes\n")
@@ -148,7 +176,7 @@ while True:
         dessine_morpion(morpion)
 
     if calcul(morpion) == 1:
-        print("L'IA a gagné")
+        print("L'IA 2 a gagné")
         break
 
     if not cases_restante(morpion):
