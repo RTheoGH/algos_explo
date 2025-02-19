@@ -46,7 +46,7 @@ def calcul(jeu):
 
     return 0
 
-def alpha_beta(jeu, prof, maximize, alpha, beta, start_time, time_limit=1):
+def minimax(jeu,prof,maximize,start_time,time_limit=1):
     n = len(jeu)
     score_actuel = calcul(jeu)
 
@@ -68,11 +68,8 @@ def alpha_beta(jeu, prof, maximize, alpha, beta, start_time, time_limit=1):
             for j in range(n):
                 if jeu[i][j] == " ":
                     jeu[i][j] = "O"
-                    best = max(best, alpha_beta(jeu, prof+1, False, alpha, beta, start_time, time_limit))
+                    best = max(best,minimax(jeu,prof+1,False,start_time,time_limit))
                     jeu[i][j] = " "
-                    alpha = max(alpha, best)
-                    if beta <= alpha:
-                        return best
         return best
     else:
         best = math.inf
@@ -80,11 +77,8 @@ def alpha_beta(jeu, prof, maximize, alpha, beta, start_time, time_limit=1):
             for j in range(n):
                 if jeu[i][j] == " ":
                     jeu[i][j] = "X"
-                    best = min(best, alpha_beta(jeu, prof+1, True, alpha, beta, start_time, time_limit))
+                    best = min(best,minimax(jeu,prof+1,True,start_time,time_limit))
                     jeu[i][j] = " "
-                    beta = min(beta, best)
-                    if beta <= alpha:
-                        return best
         return best
 
 def meilleure_position(jeu):
@@ -98,7 +92,7 @@ def meilleure_position(jeu):
         for j in range(n):
             if jeu[i][j] == " ":
                 jeu[i][j] = "O"
-                score = alpha_beta(jeu, 0, False, -math.inf, math.inf, start_time)
+                score = minimax(jeu,0,False,start_time)
                 jeu[i][j] = " "
                 if score > best:
                     best = score
@@ -125,36 +119,40 @@ morpion = [[" " for _ in range(n)] for _ in range(n)]
 dessine_morpion(morpion)
 
 while True:
+    # if cases_restante(morpion) and calcul(morpion) == 0:
+    #     print("\nTour du joueur :")
+    #     pos = input("Position i j : ").split()
+    #     print("\n")
+    #     try:
+    #         i, j = int(pos[0]),int(pos[1])
+    #         if morpion[i][j] == " ":
+    #             morpion[i][j] = "X"
+    #             dessine_morpion(morpion)
+    #         else:
+    #             print("Case occupée")
+    #             continue
+    #     except:
+    #         print("Position invalide")
+    #         continue
+
     if cases_restante(morpion) and calcul(morpion) == 0:
-        print("\nTour du joueur :")
-        pos = input("Position i j : ").split()
-        print("\n")
-        try:
-            i, j = int(pos[0]),int(pos[1])
-            if morpion[i][j] == " ":
-                morpion[i][j] = "X"
-                dessine_morpion(morpion)
-            else:
-                print("Case occupée")
-                continue
-        except:
-            print("Position invalide")
-            continue
+        print("\nTour de l'IA 1\n")
+        i,j = meilleure_position(morpion)
+        morpion[i][j] = "X"
+        dessine_morpion(morpion)
 
     if calcul(morpion) == -1:
-        print("Joueur a gagné")
+        print("IA 1 a gagné")
         break
 
     if cases_restante(morpion) and calcul(morpion) == 0:
-        print("\nTour de l'IA\n")
-        start_temps_ia = time.time() 
+        print("\nTour de l'IA 2\n")
         i,j = meilleure_position(morpion)
-        print("Temps pris par l'IA : ",time.time() - start_temps_ia,"\n")
         morpion[i][j] = "O"
         dessine_morpion(morpion)
 
     if calcul(morpion) == 1:
-        print("L'IA a gagné")
+        print("IA 2 a gagné")
         break
 
     if not cases_restante(morpion):
