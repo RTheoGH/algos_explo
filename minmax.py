@@ -141,7 +141,9 @@ while True:
 
     if cases_restante(morpion) and calcul(morpion) == 0:
         print("\nTour de l'IA\n")
+        start_temps_ia = time.time()
         i,j = meilleure_position(morpion)
+        print("Temps pris avec minmax : ", time.time()-start_temps_ia, " secondes\n")
         morpion[i][j] = "O"
         dessine_morpion(morpion)
 
